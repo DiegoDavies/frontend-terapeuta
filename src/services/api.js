@@ -1,8 +1,8 @@
-// src/services/api.js
 import axios from 'axios';
+import router from '@/router';
 
 const api = axios.create({
-  baseURL: 'http://localhost:3000', // 🔁 altere se estiver em produção
+  baseURL: 'https://backend-terapeuta-production.up.railway.app', // 🔁 altere se estiver em produção
 });
 
 // Interceptor para adicionar token
@@ -14,15 +14,15 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// api.interceptors.response.use(
-//   response => response,
-//   error => {
-//     if (error.response?.status === 401) {
-//       localStorage.removeItem('token');
-//       window.location.href = '/login'; // ou usar router.push()
-//     }
-//     return Promise.reject(error);
-//   }
-// )
+api.interceptors.response.use(
+  response => response,
+  error => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem('token');
+      router.push('/login');
+    }
+    return Promise.reject(error);
+  }
+)
 
 export default api;
